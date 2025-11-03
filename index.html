@@ -3094,7 +3094,7 @@
                     "Pincode": NaN,
                     "lat": -30.559482,
                     "lng": 22.937506,
-                    "phone": +911234567891
+                    "phone": "+11234567891"
                 },
                 {
                     "id": 378,
@@ -3307,32 +3307,31 @@
                 callBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
 
-                    // Get number from store data
-                    let tel = (store.phone || '').split(',')[0].trim();
+                    // 🔹 Step 1: Get phone number
+                    let tel = (store.phone || '').trim();
 
+                    // 🔹 Step 2: If missing, show alert
                     if (!tel) {
                         alert(`Phone number not available for "${store.name}".`);
                         return;
                     }
 
-                    // 🧩 Auto-clean and format the number for international dialing
-                    // Remove spaces, dashes, and parentheses
+                    // 🔹 Step 3: Clean number
                     tel = tel.replace(/[\s()-]/g, '');
 
-                    // If number starts with '0' and no country code is given, assume +91 (India) as default
-                    if (/^0\d{9,}$/.test(tel)) {
-                        tel = `+91${tel.substring(1)}`;
-                    }
-
-                    // If it doesn't start with '+' or a valid country code, also assume +91
+                    // 🔹 Step 4: Add +91 if missing (for Indian default)
                     if (!tel.startsWith('+')) {
-                        tel = `+91${tel}`;
+                        if (tel.startsWith('0')) {
+                            tel = `+91${tel.slice(1)}`;
+                        } else {
+                            tel = `+91${tel}`;
+                        }
                     }
 
-                    // Open the phone dialer (works on mobile devices)
+                    // 🔹 Step 5: Try to open dialer
+                    console.log('Calling:', tel);
                     window.location.href = `tel:${tel}`;
                 });
-
 
                 dirBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
